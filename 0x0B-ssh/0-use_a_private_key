@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Set the server IP address
+server_ip="8.8.8.8"
+
+# Use ssh with single-character flags to connect to the server using the private key
+ssh -i "/root/.ssh/school" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@$server_ip
