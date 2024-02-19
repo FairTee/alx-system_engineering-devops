@@ -7,41 +7,17 @@ import requests
 import csv
 
 
-def fetch_todo_progress(employee_id):
-    # Fetching data from the API
-    url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
-    response = requests.get(url)
-    todos = response.json()
-
-    # Extracting relevant information
-    employee_name = ""
-    tasks = []
-
-    for todo in todos:
-        if not employee_name:
-            employee_name = todo['userId']
-        tasks.append([employee_name, todo['completed'], todo['title']])
-
-    # Writing data to CSV file
-    filename = f"{employee_name}.csv"
-    with open(filename, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['USER_ID', 'USERNAME',
-                         'TASK_COMPLETED_STATUS', 'TASK_TITLE'])
-        writer.writerows(tasks)
-
-    print(f"Data exported to {filename}")
-
-
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-
-    try:
-        employee_id = int(sys.argv[1])
-    except ValueError:
-        print("Employee ID must be an integer.")
-        sys.exit(1)
-
-    fetch_todo_progress(employee_id)
+    USER_ID = sys.argv[1]
+    jsonplaceholder = 'https://jsonplaceholder.typicode.com/users'
+    url = jsonplaceholder + '/' + USER_ID
+    response = requests.get(url)
+    username = response.json().get('username')
+    todo_url = url + '/todos'
+    response = requests.get(todo_url)
+    tasks = response.json()
+    with open(USER_ID + '.csv', 'w') as f:
+        for task in tasks:
+            f.write('"{}","{}","{}","{}"\n'.format(USER_ID, username,
+                                                   task.get('completed'),
+                                                   task.get('title')))
