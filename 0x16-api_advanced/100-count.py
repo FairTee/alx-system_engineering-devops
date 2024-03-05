@@ -34,7 +34,10 @@ def count_words(subreddit, word_list, hot_list=[], after=None):
                     word = word.rstrip('.!_')  # Remove trailing punctuation
                     if word in word_list:
                         count_dict[word] = count_dict.get(word, 0) + 1
-            sorted_counts = sorted(count_dict.items(), key=lambda x: (-x[1], x[0]))
+            sorted_counts = sorted(
+                    count_dict.items(),
+                    key=lambda x: (-x[1], x[0])
+            )
             for word, count in sorted_counts:
                 print("{}: {}".format(word, count))
             return
